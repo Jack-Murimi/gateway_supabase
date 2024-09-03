@@ -3,16 +3,16 @@ import 'package:gateway_supabase/features/products/add_products.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:get/get.dart';
 
-class ProductsPage extends StatelessWidget {
-  const ProductsPage({super.key});
+class CustomersPage extends StatelessWidget {
+  const CustomersPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final productsStreams =
-        Supabase.instance.client.from('products').stream(primaryKey: ['ID']);
+        Supabase.instance.client.from('customers').stream(primaryKey: ['ID']);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Products'),
+        title: const Text('Customers'),
       ),
       body: StreamBuilder(
         stream: productsStreams,
@@ -44,9 +44,9 @@ class ProductsPage extends StatelessWidget {
                         ),
                       ),
                       subtitle: Text(product['description']),
-                      trailing: Text(
-                        "Ksh. ${product['price']}",
-                        style: const TextStyle(
+                      trailing: const Text(
+                        "Phone number",
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),

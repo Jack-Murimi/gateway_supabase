@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gateway_supabase/features/customers/customer.dart';
+import 'package:gateway_supabase/features/home/widgets/bottom_navigation_bar.dart';
+import 'package:gateway_supabase/features/home/widgets/home_controller.dart';
+import 'package:gateway_supabase/features/products/products.dart';
+import 'package:gateway_supabase/features/sales/sales_page.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
@@ -6,47 +11,23 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final HomeController homeController = Get.put(HomeController());
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-      ),
-      body: GridView.count(
-        crossAxisCount: 2,
+      body: Padding(
         padding: const EdgeInsets.all(16.0),
-        children: const <Widget>[
-          HomeButton(title: 'Record Sales', icon: Icons.shopping_cart, route: '/sales'),
-          HomeButton(title: 'Record Purchases', icon: Icons.receipt, route: '/purchases'),
-          HomeButton(title: 'Manage Customers', icon: Icons.people, route: '/customers'),
-          HomeButton(title: 'Manage Products', icon: Icons.inventory, route: '/products'),
-        ],
-      ),
-    );
-  }
-}
-
-class HomeButton extends StatelessWidget {
-  final String title;
-  final IconData icon;
-  final String route;
-
-  const HomeButton({super.key, required this.title, required this.icon, required this.route});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Get.toNamed(route);
-      },
-      child: Card(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 50.0),
-            const SizedBox(height: 10.0),
-            Text(title, style: const TextStyle(fontSize: 18.0)),
-          ],
+        child: Obx(
+          () => IndexedStack(
+            index: homeController.currentPageIndex.value,
+            children: const [
+              ProductsPage(),
+              CustomersPage(),
+              SalesPage(),
+              Text('Purchases'),
+            ],
+          ),
         ),
       ),
+      bottomNavigationBar: JNavigationBar(),
     );
   }
 }
