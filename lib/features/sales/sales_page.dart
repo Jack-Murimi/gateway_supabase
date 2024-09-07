@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gateway_supabase/features/products/add_products.dart';
+import 'package:gateway_supabase/features/sales/add_sales.dart';
 import 'package:get/get.dart';
 
 class SalesPage extends StatelessWidget {
@@ -15,7 +15,8 @@ class SalesPage extends StatelessWidget {
         child: Text('Sales'),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Get.to(() => AddProductPage()),
+        onPressed: () => Get.to(() => const AddSales()),
+        heroTag: 'add_sales',
         child: const Icon(Icons.add),
       ),
     );

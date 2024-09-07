@@ -8,8 +8,9 @@ class ProductsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final productsStreams =
-        Supabase.instance.client.from('products').stream(primaryKey: ['ID']);
+    final productsStreams = Supabase.instance.client
+        .from('products')
+        .stream(primaryKey: ['ID']).order('name', ascending: true);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Products'),
@@ -65,6 +66,7 @@ class ProductsPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Get.to(() => AddProductPage()),
+        heroTag: 'add_product',
         child: const Icon(Icons.add),
       ),
     );

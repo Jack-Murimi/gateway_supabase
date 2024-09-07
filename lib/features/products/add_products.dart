@@ -35,6 +35,8 @@ class AddProductPage extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 16),
+
+              // Description field
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Description',
@@ -49,6 +51,8 @@ class AddProductPage extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 16),
+
+              // Price field
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Price',
@@ -60,24 +64,27 @@ class AddProductPage extends StatelessWidget {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a price';
                   }
-                  try {
-                    double.parse(value);
-                  } catch (e) {
-                    return 'Please enter a valid price';
-                  }
                   return null;
                 },
               ),
               const SizedBox(height: 32),
+
+              // Add a button to add the product with loading indicator
               Center(
-                child: ElevatedButton(
-                  onPressed: controller.addProduct,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 16),
-                  ),
-                  child: const Text('Add Product'),
-                ),
+                child: Obx(() => ElevatedButton(
+                      onPressed: controller.isLoading.value
+                          ? null
+                          : () => controller.addProduct(),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 16),
+                      ),
+                      child: controller.isLoading.value
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : const Text('Add Product'),
+                    )),
               ),
             ],
           ),

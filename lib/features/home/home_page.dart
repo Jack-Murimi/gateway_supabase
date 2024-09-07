@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gateway_supabase/features/customers/customer.dart';
+import 'package:gateway_supabase/features/customers/customers_page.dart';
 import 'package:gateway_supabase/features/home/widgets/bottom_navigation_bar.dart';
 import 'package:gateway_supabase/features/home/widgets/home_controller.dart';
 import 'package:gateway_supabase/features/products/products.dart';

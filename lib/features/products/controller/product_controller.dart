@@ -6,51 +6,78 @@ class ProductController extends GetxController {
   var name = ''.obs;
   var description = ''.obs;
   var price = 0.0.obs;
+  var isLoading = false.obs;
 
   final formKey = GlobalKey<FormState>();
 
+  // Handle name input change
   void onNameChanged(String value) {
     name.value = value;
   }
 
+  // Handle description input change
   void onDescriptionChanged(String value) {
     description.value = value;
   }
 
+  // Handle price input change and validation
   void onPriceChanged(String value) {
-    try {
-      price.value = double.parse(value);
-    } catch (e) {
-      Get.snackbar("Error", "Please enter a valid price");
+    double? parsedPrice = double.tryParse(value);
+    if (parsedPrice != null && parsedPrice >= 0) {
+      price.value = parsedPrice;
+    } else {
+      Get.snackbar("Invalid Input",
+          "Please enter a valid positive number for the price.");
     }
   }
 
+  // Add a product to Supabase
   Future<void> addProduct() async {
-    if (formKey.currentState!.validate()) {
-      try {
-        final response =
-            await Supabase.instance.client.from('products').insert({
-          'name': name.value,
-          'description': description.value,
-          'price': price.value,
-        });
+    // Validate form fields before saving
+    if (!formKey.currentState!.validate()) {
+      Get.snackbar("Validation Error", "Please fill out all fields correctly.");
+      return;
+    }
 
-        if (response.error == null) {
-          Get.snackbar("Success", "Product added successfully");
-          clearForm();
-        } else {
-          Get.snackbar("Error", response.error!.message);
-        }
-      } catch (e) {
-        Get.snackbar("Error", "Something went wrong");
+    formKey.currentState!.save(); // Save form inputs
+
+    isLoading.value = true; // Show loading state
+
+    try {
+      // Insert the product into the database
+      final response = await Supabase.instance.client.from('products').insert({
+        'name': name.value,
+        'description': description.value,
+        'price': price.value,
+      }).select();
+
+      if (response.isNotEmpty) {
+        Get.snackbar("Success", "Product added successfully.");
+        clearForm();
+      } else {
+        Get.snackbar("Error", "Failed to add product. Please try again.");
       }
+    } catch (error) {
+      // Catch and display any errors
+      Get.snackbar("Database Error", "An error occurred: ${error.toString()}");
+    } finally {
+      isLoading.value = false; // Hide loading state
     }
   }
 
+  // Clear the form and reset fields
   void clearForm() {
     name.value = '';
     description.value = '';
     price.value = 0.0;
-    formKey.currentState!.reset();
+    formKey.currentState?.reset();
+  }
+
+  // Helper method for form validation
+  String? validateField(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'This field is required';
+    }
+    return null;
   }
 }
