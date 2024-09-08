@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class ProductController extends GetxController {
+class ProductsController extends GetxController {
   var name = ''.obs;
   var description = ''.obs;
   var price = 0.0.obs;
@@ -79,5 +79,12 @@ class ProductController extends GetxController {
       return 'This field is required';
     }
     return null;
+  }
+
+  // product stream
+  Stream<List<Map<String, dynamic>>> getProductsStream() {
+    return Supabase.instance.client
+        .from('products')
+        .stream(primaryKey: ['id']).order('created_at');
   }
 }

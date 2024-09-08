@@ -3,7 +3,7 @@ import 'package:gateway_supabase/features/products/controller/product_controller
 import 'package:get/get.dart';
 
 class AddProductPage extends StatelessWidget {
-  final ProductController controller = Get.put(ProductController());
+  final ProductsController controller = Get.put(ProductsController());
 
   AddProductPage({super.key});
 
